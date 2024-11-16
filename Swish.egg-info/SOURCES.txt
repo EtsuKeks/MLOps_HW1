@@ -1,9 +1,0 @@
-README.md
-pyproject.toml
-setup.py
-Swish.egg-info/PKG-INFO
-Swish.egg-info/SOURCES.txt
-Swish.egg-info/dependency_links.txt
-Swish.egg-info/top_level.txt
-swish/__init__.py
-swish/python/swish_binding.cpython-310-x86_64-linux-gnu.so

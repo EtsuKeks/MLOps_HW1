@@ -14,8 +14,11 @@ RUN pip install --no-cache setuptools build
 RUN python3 -m build
 RUN pip install /python/dist/Swish-*.whl
 
+ENV CUDA_VISIBLE_DEVICES=""
+ENV TF_CPP_MIN_LOG_LEVEL=2
+ENV XLA_FLAGS="--xla_gpu_cuda_data_dir="
 COPY ./tests.py /python/tests.py
-RUN pip install --no-cache-dir tensorflow
-RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
+RUN pip install --no-cache-dir tensorflow-cpu
+RUN pip install --no-cache-dir torch==2.5.0 --index-url https://download.pytorch.org/whl/cpu
 
 CMD ["python", "/python/tests.py"]

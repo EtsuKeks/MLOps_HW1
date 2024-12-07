@@ -1,3 +1,6 @@
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = ""
+
 from swish import Swish
 from torch import Tensor
 from torch import nn
@@ -12,7 +15,7 @@ def test_timings(func, test_arrays):
     end_time = time.time()
     return round(end_time - start_time, 5)
 
-def compare(test_arrays, torch_swish, tensorflow_swish):
+def compare(test_arrays):
     print(
         "Swish (Pure C++): {0} seconds".format(
             test_timings(Swish, map(lambda arr: arr.tolist(), test_arrays))
@@ -20,20 +23,17 @@ def compare(test_arrays, torch_swish, tensorflow_swish):
     )
     print(
         "Swish (Tensorflow): {0} seconds".format(
-            test_timings(tensorflow_swish, test_arrays)
+            test_timings(tf.keras.activations.silu, test_arrays)
         )
     )
     print(
         "Swish (PyTorch): {0} seconds".format(
-            test_timings(torch_swish, map(lambda arr: Tensor(arr), test_arrays))
+            test_timings(nn.SiLU, map(lambda arr: Tensor(arr), test_arrays))
         )
     )
-
-torch_swish = nn.SiLU
-tensorflow_swish = tf.keras.activations.silu
 
 test_arrays = []
 for _ in range(100):
     test_arrays.append(numpy.random.rand(500000))
 
-compare(test_arrays, torch_swish, tensorflow_swish)
+compare(test_arrays)
